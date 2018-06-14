@@ -14,8 +14,6 @@
 				<Option parameters="/Debug" />
 				<Compiler>
 					<Add option="-O2" />
-					<Add option="-std=c++11" />
-					<Add directory="src" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
@@ -32,31 +30,31 @@
 					<Add option="-std=c++11" />
 					<Add option="-g" />
 					<Add option="-DDEBUG" />
-					<Add directory="src" />
-					<Add directory="C:/Program Files (x86)/mosquitto/devel" />
 				</Compiler>
 			</Target>
 		</Build>
 		<Compiler>
 			<Add option="-Wall" />
 			<Add option="-std=c++11" />
-			<Add option="-m32" />
+			<Add option="-m64" />
 			<Add option="-fexceptions" />
 			<Add directory="../../dependency" />
-			<Add directory="../../src" />
+			<Add directory="/usr/local/include" />
 		</Compiler>
 		<Linker>
-			<Add option="-m32" />
-			<Add library="mosquittopp" />
+			<Add option="-m64" />
+			<Add library="libpaho-mqtt3a" />
+			<Add library="libpaho-mqttpp3" />
 			<Add directory="/usr/lib/x86_64-linux-gnu" />
 		</Linker>
+		<Unit filename="../../dependency/MqttBase/MqttBase.cpp" />
+		<Unit filename="../../dependency/MqttBase/MqttBase.h" />
 		<Unit filename="../../dependency/MqttBase/MqttClient.cpp" />
 		<Unit filename="../../dependency/MqttBase/MqttClient.h" />
 		<Unit filename="../../dependency/MqttBase/MqttDaemon.cpp" />
 		<Unit filename="../../dependency/MqttBase/MqttDaemon.h" />
 		<Unit filename="../../dependency/Plateforms/Plateforms.cpp" />
 		<Unit filename="../../dependency/Plateforms/Plateforms.h" />
-		<Unit filename="../../dependency/SafeFunctions/SafeFunctions.cpp" />
 		<Unit filename="../../dependency/SafeFunctions/SafeFunctions.h" />
 		<Unit filename="../../dependency/Service/Service.cpp" />
 		<Unit filename="../../dependency/Service/Service.h" />
@@ -69,12 +67,16 @@
 		<Unit filename="../../dependency/SimpleLog/SimpleLog.inl" />
 		<Unit filename="../../dependency/StringTools/StringTools.cpp" />
 		<Unit filename="../../dependency/StringTools/StringTools.h" />
-		<Unit filename="../../src/CacheDevice.cpp" />
 		<Unit filename="../../src/CacheDevice.h" />
+		<Unit filename="../../src/CacheManager.cpp" />
+		<Unit filename="../../src/CacheManager.h" />
 		<Unit filename="../../src/CalculData.cpp" />
 		<Unit filename="../../src/CalculData.h" />
 		<Unit filename="../../src/Calculator.cpp" />
 		<Unit filename="../../src/Calculator.h" />
+		<Unit filename="../../src/ICacheMessage.h" />
+		<Unit filename="../../src/MqttBridge.cpp" />
+		<Unit filename="../../src/MqttBridge.h" />
 		<Unit filename="../../src/MqttCalcul.cpp" />
 		<Unit filename="../../src/MqttCalcul.h" />
 		<Unit filename="../../src/main.cpp" />
