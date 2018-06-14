@@ -14,7 +14,8 @@ addons:
     packages:
       - g++-4.9
       - valgrind
-    
+      - mosquitto
+
 before_install:
   - cd ..
   - git clone https://github.com/eclipse/paho.mqtt.c.git
