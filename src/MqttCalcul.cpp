@@ -189,10 +189,9 @@ int MqttCalcul::DaemonLoop(int argc, char* argv[])
 
 	Subscribe(GetMainTopic() + "command/#");
 	LOG_VERBOSE(m_Log) << "Subscript to : " << GetMainTopic() + "command/#";
-	
+
 	for (vector<CalculData>::iterator it = m_Calculs.begin(); it != m_Calculs.end(); ++it)
 	{
-		CalculData& calculData = *it;
 		CalculData* pCalculData = &(*it);
 		vector<CalculData::Device> devices = pCalculData->GetDevices();
 		if (devices.size() != 0) continue;
