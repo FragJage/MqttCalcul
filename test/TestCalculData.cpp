@@ -74,7 +74,7 @@ bool TestCalculData::Devices()
 	{
 		CalculData myError1("myError1", "NUM", "{localhost:/topic/value1*1.5");
 	}
-	catch (logic_error e)
+	catch (logic_error& e)
 	{
 		string msg = e.what();
 		assert("Invalid device, don't find end mark with '}'" == msg);
