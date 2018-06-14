@@ -1,0 +1,10 @@
+branches:
+  only:
+    - master
+
+image: Visual Studio 2015
+configuration: Release
+platform: x86
+
+build:
+  project: builds\msvc\MqttCalcul.sln
