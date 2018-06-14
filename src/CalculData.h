@@ -10,13 +10,13 @@ class CalculData
         enum CalculType {Switch, Num};
         struct Device
         {
-			Device(std::string server, std::string topic, size_t start, size_t end) : Server(server), Topic(topic), Start(start), End(end) {};
+			Device(const std::string& server, const std::string& topic, size_t start, size_t end) : Server(server), Topic(topic), Start(start), End(end) {};
             std::string Server;
             std::string Topic;
             size_t Start;
             size_t End;
         };
-        CalculData(std::string name, std::string type, std::string formula);
+        CalculData(const std::string& name, const std::string& type, const std::string& formula);
         ~CalculData();
 
         std::string GetName() { return m_Name; }
@@ -25,7 +25,7 @@ class CalculData
 		bool IsSet() { return m_IsSet; }
 		std::string GetValue() { return m_Value; }
 		const std::vector<Device>& GetDevices() { return m_Devices; }
-		bool IsNewValue(std::string value);
+		bool IsNewValue(const std::string& value);
 
     protected:
 

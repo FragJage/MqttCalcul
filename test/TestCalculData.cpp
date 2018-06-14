@@ -45,7 +45,7 @@ bool TestCalculData::Type()
 	{
 		CalculData myError("myError", "XXXXX", "1+2");
 	}
-	catch (logic_error e)
+	catch (logic_error& e)
 	{
 		string msg = e.what();
 		assert("Invalid CalculType, waiting type 'num' or 'switch'" == msg);

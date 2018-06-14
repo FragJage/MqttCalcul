@@ -37,7 +37,7 @@ void MqttCalcul::DaemonConfigure(SimpleIni& iniFile)
         {
             m_Calculs.emplace_back(name, type, formula);
         }
-        catch(logic_error e)
+        catch(logic_error& e)
         {
             LOG_WARNING(m_Log) << "Unable to create " << name << " : " << e.what();
 			continue;
@@ -46,7 +46,6 @@ void MqttCalcul::DaemonConfigure(SimpleIni& iniFile)
 
 	for (vector<CalculData>::iterator it = m_Calculs.begin(); it != m_Calculs.end(); ++it)
 	{
-		CalculData& calculData = *it;
 		CalculData* pCalculData = &(*it);
 		vector<CalculData::Device> devices = pCalculData->GetDevices();
 		for (auto it = devices.cbegin(); it != devices.cend(); ++it)
@@ -124,14 +123,13 @@ void MqttCalcul::on_cache(const string& server, const string& topic, const strin
 	vector<CalculData::Device> devices;
 	map<string, string> values;
 	CacheValue cacheValue;
-	bool allValues;
 	bool somethingToSend = false;
 
 
 	for (auto itCalculs = calculs.begin(); itCalculs != calculs.end(); ++itCalculs)
 	{
 		devices = (*itCalculs)->GetDevices();
-		allValues = true;
+		bool allValues = true;
 		values.clear();
 		for (auto itDevices = devices.begin(); itDevices != devices.end(); ++itDevices)
 		{
