@@ -1,7 +1,7 @@
 #include <iostream>
 #include <cstdio>
 #include <cstdlib>
-#include <assert.h>
+#include <cassert>
 #include "Service.h"
 
 #ifndef _MSC_VER
@@ -31,6 +31,8 @@ void WINAPI ServiceCtrlHandler(unsigned long controlCode)
 	return;
 }
 #else
+#include <signal.h>
+
 void service_signal_handler(int signal)
 {
 	switch (signal)
@@ -80,6 +82,7 @@ void Service::Destroy()
 
 Service::Service(const string& name, const string& description, IService *service) : m_Status(StatusKind::START)
 {
+#ifdef WIN32
 	size_t len;
 
 	len = name.size() + 1;
@@ -89,6 +92,10 @@ Service::Service(const string& name, const string& description, IService *servic
 	len = description.size() + 1;
 	m_pDescription = new char[len];
 	strcpy_s(m_pDescription, len, description.c_str());
+#else
+	strcpy(m_pName, name.c_str());
+	strcpy(m_pDescription, description.c_str());
+#endif
 
 	m_iService = service;
 	m_pInstance = this;
@@ -326,7 +333,6 @@ void Service::ServiceMain(int argc, char* argv[])
 }
 #else
 #include <unistd.h>
-#include <signal.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 

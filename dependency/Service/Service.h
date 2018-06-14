@@ -5,6 +5,7 @@
 #include <Windows.h>
 #include <Winsvc.h>
 #endif // WIN32
+#include <cstring>
 #include <string>
 #include <vector>
 #include <condition_variable>
