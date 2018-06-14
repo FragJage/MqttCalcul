@@ -1,5 +1,5 @@
 #include "CacheManager.h"
-#include "StringTools\StringTools.h"
+#include "StringTools/StringTools.h"
 
 using namespace std;
 
@@ -15,7 +15,7 @@ bool CacheManager::AddSensor(const string& server, const string& topic, CalculDa
 {
 	map<string, MqttBridge>::iterator itMqtt;
 
-	
+
 	itMqtt = m_MqttClients.find(server);
 	if (itMqtt == m_MqttClients.end())
 	{
@@ -31,7 +31,7 @@ bool CacheManager::AddSensor(const string& server, const string& topic, CalculDa
 	}
 
 	itMqtt->second.Subscribe(topic);
-	
+
 	map<string, CacheValue>::iterator itCacheDevices;
 	itCacheDevices = m_CacheDevices.find(server + ":" + topic);
 

@@ -82,20 +82,23 @@ void Service::Destroy()
 
 Service::Service(const string& name, const string& description, IService *service) : m_Status(StatusKind::START)
 {
-#ifdef WIN32
 	size_t len;
 
 	len = name.size() + 1;
     m_pName = new char[len];
+    #ifdef WIN32
     strcpy_s(m_pName, len, name.c_str());
+    #else
+	strcpy(m_pName, name.c_str());
+    #endif
 
 	len = description.size() + 1;
 	m_pDescription = new char[len];
+    #ifdef WIN32
 	strcpy_s(m_pDescription, len, description.c_str());
-#else
-	strcpy(m_pName, name.c_str());
+    #else
 	strcpy(m_pDescription, description.c_str());
-#endif
+    #endif
 
 	m_iService = service;
 	m_pInstance = this;
@@ -114,7 +117,7 @@ int Service::Wait(vector<reference_wrapper<ServiceConditionVariable>> cvs)
 {
 	for(size_t i=0; i<cvs.size(); i++)
 		cvs[i].get().set_id(i+1);
-	
+
 	return ServiceConditionVariable::wait();
 }
 
@@ -413,9 +416,9 @@ int Service::Start(int argc, char* argv[])
         if(strcmp("start", argv[1]+1) == 0) return CmdStart(argc, argv);
         if(strcmp("stop", argv[1]+1) == 0) return CmdStop();
         if(strcmp("restart", argv[1]+1) == 0) return CmdRestart(argc, argv);
-        if(strcmp("console", argv[1]+1) == 0) return m_iService->ServiceStart(argc, argv);
+        if(strcmp("console", argv[1]+1) == 0) return m_iService->ServiceLoop(argc, argv);
     }
-    if (argc == 1) return m_iService->ServiceStart(argc, argv);
+    if (argc == 1) return m_iService->ServiceLoop(argc, argv);
 
 	cout << endl << "Usage :" << endl;
 	cout << argv[0] << " -start       To start the daemon" << endl;

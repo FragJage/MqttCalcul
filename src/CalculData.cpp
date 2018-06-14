@@ -1,6 +1,6 @@
 #include <stdexcept>
 #include "CalculData.h"
-#include "StringTools\StringTools.h"
+#include "StringTools/StringTools.h"
 
 using namespace std;
 

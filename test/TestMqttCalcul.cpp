@@ -108,7 +108,7 @@ bool TestMqttCalcul::Commands()
 	assert(m_Messages.end() != it);
 	assert("ON" == it->second);
 	m_Messages.clear();
-	
+
 	mqttClient.Publish("command", "REQUEST");
 	waitMsg(3, 500);
 	it = m_Messages.find("calcul/FiltrationPiscine");
