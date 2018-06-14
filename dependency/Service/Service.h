@@ -72,8 +72,8 @@ private:
 
 
         static std::vector<std::string> m_runDirs;
-        string m_daemonName;
-        string m_pidFile;
+        std::string m_daemonName;
+        std::string m_pidFile;
 	#endif // WIN32
 
 	char*				m_pName;
