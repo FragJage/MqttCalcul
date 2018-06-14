@@ -72,6 +72,9 @@ add_executable(
   main.cpp
 )
 
+target_link_libraries(MqttCalcul libpaho-mqtt3a)
+target_link_libraries(MqttCalcul libpaho-mqttpp3)
+
 #Spécification WIN32
 if(WIN32)
   target_link_libraries(MqttCalcul ws2_32)

@@ -90,6 +90,8 @@ add_executable(
 )
 
 target_link_libraries(unittest ${CMAKE_THREAD_LIBS_INIT})
+target_link_libraries(unittest libpaho-mqtt3a)
+target_link_libraries(unittest libpaho-mqttpp3)
 
 #Spécification WIN32
 if(WIN32)
