@@ -22,12 +22,13 @@ before_install:
   - mkdir build && cd build
   - cmake -DPAHO_WITH_SSL=FALSE -DPAHO_BUILD_DOCUMENTATION=FALSE -DPAHO_BUILD_SAMPLES=FALSE -DPAHO_ENABLE_TESTING=FALSE ..
   - make && sudo make install
+  - cd ../..
   - git clone https://github.com/eclipse/paho.mqtt.cpp.git
   - cd paho.mqtt.cpp
   - mkdir build && cd build
   - cmake -DPAHO_WITH_SSL=FALSE -DPAHO_MQTT_C_PATH=../../paho.mqtt.c ..
   - make && sudo make install
-  - cd MqttCalcul
+  - cd ../../MqttCalcul
 
 install:
   - sudo pip install -U "cpp-coveralls"
