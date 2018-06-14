@@ -87,7 +87,7 @@ bool TestCalculData::Devices()
 	{
 		CalculData myError2("myError2", "NUM", "{local/topic/value1}*1.5");
 	}
-	catch (logic_error e)
+	catch (logic_error& e)
 	{
 		string msg = e.what();
 		assert("Device without server (don't find ':')" == msg);
