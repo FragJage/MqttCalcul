@@ -48,11 +48,11 @@ void MqttCalcul::DaemonConfigure(SimpleIni& iniFile)
 	{
 		CalculData* pCalculData = &(*it);
 		vector<CalculData::Device> devices = pCalculData->GetDevices();
-		for (auto it = devices.cbegin(); it != devices.cend(); ++it)
+		for (auto itdev = devices.cbegin(); itdev != devices.cend(); ++itdev)
 		{
-			LOG_VERBOSE(m_Log) << "Subcribe to server " << it->Server << ", topic " << it->Topic;
-			if(!m_CacheManager.AddSensor(it->Server, it->Topic, pCalculData))
-				LOG_WARNING(m_Log) << "Unable to find server " << it->Server << ", topic " << it->Topic;
+			LOG_VERBOSE(m_Log) << "Subcribe to server " << itdev->Server << ", topic " << itdev->Topic;
+			if(!m_CacheManager.AddSensor(itdev->Server, itdev->Topic, pCalculData))
+				LOG_WARNING(m_Log) << "Unable to find server " << itdev->Server << ", topic " << itdev->Topic;
 		}
 	}
 

@@ -2,7 +2,7 @@
 
 using namespace std;
 
-MqttBridge::MqttBridge(const string& server, ICacheMessage* callback) : m_Server(server), m_Callback(callback)
+MqttBridge::MqttBridge(const string& server, ICacheMessage* cacheMsgCb) : m_Server(server), m_Callback(cacheMsgCb)
 {
 	SetServer(m_Server, "");
 	Connect();

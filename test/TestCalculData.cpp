@@ -1,3 +1,4 @@
+#include <stdexcept>
 #include "TestCalculData.h"
 
 using namespace std;

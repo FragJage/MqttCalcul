@@ -30,6 +30,7 @@ before_install:
   - cmake -DPAHO_WITH_SSL=TRUE -DPAHO_MQTT_C_PATH=../../paho.mqtt.c ..
   - make && sudo make install
   - cd ../../MqttCalcul
+  - sudo ldconfig
 
 install:
   - sudo pip install -U "cpp-coveralls"
