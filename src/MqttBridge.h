@@ -9,7 +9,7 @@
 class MqttBridge : public MqttBase
 {
     public:
-		MqttBridge(const std::string& server, ICacheMessage* callback);
+		MqttBridge(const std::string& server, ICacheMessage* cacheMsgCb);
         ~MqttBridge();
 		void Subscribe(const std::string& topic);
 		void on_message(const std::string& topic, const std::string& message);
