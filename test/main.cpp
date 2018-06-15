@@ -9,11 +9,10 @@
 
 using namespace std;
 
-int main(int argc, char* argv[])
+int main()
 {
     UnitTest unitTest;
     int ret = 0;
-
 
     try
     {
