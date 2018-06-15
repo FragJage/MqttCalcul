@@ -18,8 +18,9 @@ public :
 	ServiceConditionVariable() : m_Id(-1) {};
 	~ServiceConditionVariable() {};
 	void set_id(int id) { m_Id = id; };
-	void notify_one() { std::lock_guard<std::mutex> lock(m_UniqueMutex); m_LastId = m_Id; m_UniqueConditionVariable.notify_one(); };
-	static int wait() { std::unique_lock<std::mutex> lock(m_UniqueMutex); m_UniqueConditionVariable.wait(lock); return m_LastId; };
+	void notify_one();
+	static int wait();
+	static int wait_for(int timeout);
 private :
 	int m_Id;
 	static std::condition_variable m_UniqueConditionVariable;
@@ -38,15 +39,18 @@ public:
 	static Service* Get();
 	static void Destroy();
 	static const int STATUS_CHANGED;
+	static const int TIMEOUT;
 
 	int Start(int argc, char* argv[]);
 	int Wait(std::vector<std::reference_wrapper<ServiceConditionVariable>> cvs);
+	int WaitFor(std::vector<std::reference_wrapper<ServiceConditionVariable>> cvs, int timeout);
 	StatusKind GetStatus();
 	void ChangeStatus(StatusKind status);
 
 private:
     Service(const std::string& name, const std::string& description, IService *service);
     virtual ~Service();
+	void SetIds(std::vector<std::reference_wrapper<ServiceConditionVariable>> cvs);
 
     #ifdef WIN32
         typedef BOOL(WINAPI *ChangeServiceConfigType)(SC_HANDLE, DWORD, LPCVOID);
