@@ -4,10 +4,6 @@
 #include <cassert>
 #include "Service.h"
 
-#ifndef _MSC_VER
-//#include "SafeFunctions/SafeFunctions.h"
-#endif
-
 using namespace std;
 
 condition_variable ServiceConditionVariable::m_UniqueConditionVariable;
@@ -56,11 +52,38 @@ void service_signal_handler(int signal)
 
 /**************************************************************************************************************/
 /***                                                                                                        ***/
+/*** Class ServiceConditionVariable                                                                         ***/
+/***                                                                                                        ***/
+/**************************************************************************************************************/
+void ServiceConditionVariable::notify_one()
+{
+	lock_guard<mutex> lock(m_UniqueMutex); 
+	m_LastId = m_Id; 
+	m_UniqueConditionVariable.notify_one();
+};
+
+int ServiceConditionVariable::wait()
+{
+	unique_lock<mutex> lock(m_UniqueMutex);
+	m_UniqueConditionVariable.wait(lock);
+	return m_LastId;
+};
+
+int ServiceConditionVariable::wait_for(int timeout)
+{
+	unique_lock<mutex> lock(m_UniqueMutex);
+	if (m_UniqueConditionVariable.wait_for(lock, timeout * 1ms) == cv_status::timeout) m_LastId = Service::TIMEOUT;
+	return m_LastId;
+};
+
+/**************************************************************************************************************/
+/***                                                                                                        ***/
 /*** Class Service                                                                                          ***/
 /***                                                                                                        ***/
 /**************************************************************************************************************/
 Service* Service::m_pInstance = nullptr;
 const int Service::STATUS_CHANGED = 0;
+const int Service::TIMEOUT = -1;
 
 Service* Service::Create(const string& name, const string& description, IService *service)
 {
@@ -113,12 +136,22 @@ Service::~Service()
 	m_pInstance = nullptr;
 }
 
+void Service::SetIds(vector<reference_wrapper<ServiceConditionVariable>> cvs)
+{
+	for (size_t i = 0; i<cvs.size(); i++)
+		cvs[i].get().set_id(i + 1);
+}
+
 int Service::Wait(vector<reference_wrapper<ServiceConditionVariable>> cvs)
 {
-	for(size_t i=0; i<cvs.size(); i++)
-		cvs[i].get().set_id(i+1);
-
+	SetIds(cvs);
 	return ServiceConditionVariable::wait();
+}
+
+int Service::WaitFor(std::vector<std::reference_wrapper<ServiceConditionVariable>> cvs, int timeout)
+{
+	SetIds(cvs);
+	return ServiceConditionVariable::wait_for(timeout);
 }
 
 Service::StatusKind Service::GetStatus()
