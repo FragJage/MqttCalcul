@@ -4,8 +4,9 @@
 
 using namespace std;
 
-MqttBase::MqttBase() : m_Server("tcp://localhost:1883"), m_Id(""), m_MainTopic(""), m_KeepAlive(300), m_Timeout(5), m_MqttClient(nullptr)
+MqttBase::MqttBase() : m_Server("tcp://localhost:1883"), m_Id(""), m_MainTopic(""), m_KeepAlive(300), m_Timeout(5), m_MqttClient(nullptr), m_MqttCli(m_Server, "")
 {
+	m_MqttClient = &m_MqttCli;
 }
 
 MqttBase::~MqttBase()
@@ -48,10 +49,10 @@ int MqttBase::GetKeepAlive()
 void MqttBase::Connect()
 {
 	cout << "A1" << endl;
-	if (m_MqttClient!=nullptr) Disconnect();
+	//if (m_MqttClient!=nullptr) Disconnect();
 	cout << "A2 " << m_Server << endl;
 
-	m_MqttClient = new mqtt::client(m_Server, "X");
+	//m_MqttClient = new mqtt::client(m_Server, "X");
 	m_MqttClient->set_callback(*this);
 	cout << "A3" << endl;
 	/*
@@ -80,8 +81,8 @@ void MqttBase::Disconnect()
 	if(m_MqttClient->is_connected()) 
 		m_MqttClient->disconnect();
 
-	delete m_MqttClient;
-	m_MqttClient = nullptr;
+	//delete m_MqttClient;
+	//m_MqttClient = nullptr;
 }
 
 void MqttBase::Publish(const string& sensor, const string& value)
