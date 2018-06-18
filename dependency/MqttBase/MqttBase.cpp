@@ -1,3 +1,5 @@
+#include <iostream>
+
 #include "MqttBase.h"
 
 using namespace std;
@@ -45,19 +47,29 @@ int MqttBase::GetKeepAlive()
 
 void MqttBase::Connect()
 {
+	cout << "A1" << endl;
 	if (m_MqttClient!=nullptr) Disconnect();
+	cout << "A2" << endl;
 
 	m_MqttClient = new mqtt::client(m_Server, m_Id);
 	m_MqttClient->set_callback(*this);
+	cout << "A3" << endl;
 
 	mqtt::connect_options connOpts;
+	cout << "." << endl;
 	connOpts.set_automatic_reconnect(true);
+	cout << "." << endl;
 	connOpts.set_clean_session(true);
+	cout << "." << endl;
 	connOpts.set_connection_timeout(m_Timeout);
+	cout << "." << endl;
 	connOpts.set_connect_timeout(m_Timeout);
+	cout << "." << endl;
 	connOpts.set_keep_alive_interval(m_KeepAlive);
+	cout << "A4" << endl;
 
 	m_MqttClient->connect(connOpts);
+	cout << "A5" << endl;
 }
 
 void MqttBase::Disconnect()

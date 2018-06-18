@@ -4,26 +4,20 @@ using namespace std;
 
 TestMqttCalcul::TestMqttCalcul() : TestClass("MqttCalcul", this)
 {
-cout << "N1" << endl;
 	addTest("Start", &TestMqttCalcul::Start);
 	addTest("Calculation", &TestMqttCalcul::Calculation);
 	addTest("Commands", &TestMqttCalcul::Commands);
 	addTest("Stop", &TestMqttCalcul::Stop);
-cout << "N2" << endl;
 
 	mqttClient.SetMessageCallback(this);
 cout << "N3" << endl;
 	mqttClient.Connect();
 cout << "N4" << endl;
 	mqttClient.Subscribe("calcul/#");
-cout << "N5" << endl;
 	mqttClient.SetMainTopic("calcul");
-cout << "N6" << endl;
 
 	mqttSender.Connect();
-cout << "N7" << endl;
 	mqttSender.SetMainTopic("owfs");
-cout << "N8" << endl;
 }
 
 TestMqttCalcul::~TestMqttCalcul()
