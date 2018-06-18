@@ -3,7 +3,8 @@ language: cpp
 compiler: gcc
 env:
   global:
-    - COMPILER=g++-4.9
+    - C_COMPILER=gcc-6
+    - CXX_COMPILER=g++-6
 
 sudo: required
 
@@ -12,7 +13,8 @@ addons:
     sources:
       - ubuntu-toolchain-r-test
     packages:
-      - g++-4.9
+      - gcc-6
+      - g++-6
       - valgrind
       - mosquitto
 
@@ -21,13 +23,13 @@ before_install:
   - git clone https://github.com/eclipse/paho.mqtt.c.git
   - cd paho.mqtt.c
   - mkdir build && cd build
-  - cmake -DPAHO_WITH_SSL=TRUE -DPAHO_BUILD_DOCUMENTATION=FALSE -DPAHO_BUILD_SAMPLES=FALSE -DPAHO_ENABLE_TESTING=FALSE ..
+  - cmake -DPAHO_WITH_SSL=TRUE -DPAHO_BUILD_DOCUMENTATION=FALSE -DPAHO_BUILD_SAMPLES=FALSE -DPAHO_ENABLE_TESTING=FALSE -DCMAKE_CXX_COMPILER=$(which $CXX_COMPILER) -DCMAKE_C_COMPILER=$(which $C_COMPILER) ..
   - make && sudo make install
   - cd ../..
   - git clone https://github.com/eclipse/paho.mqtt.cpp.git
   - cd paho.mqtt.cpp
   - mkdir build && cd build
-  - cmake -DPAHO_WITH_SSL=TRUE -DPAHO_MQTT_C_PATH=../../paho.mqtt.c ..
+  - cmake -DPAHO_WITH_SSL=TRUE -DPAHO_MQTT_C_PATH=../../paho.mqtt.c -DCMAKE_CXX_COMPILER=$(which $CXX_COMPILER) -DCMAKE_C_COMPILER=$(which $C_COMPILER) ..
   - make && sudo make install
   - cd ../../MqttCalcul
   - sudo ldconfig
@@ -36,11 +38,11 @@ install:
   - sudo pip install -U "cpp-coveralls"
 
 script:
-  cmake . -G"Unix Makefiles" -DCMAKE_CXX_COMPILER=$(which $COMPILER);
+  cmake . -G"Unix Makefiles" -DCMAKE_CXX_COMPILER=$(which $CXX_COMPILER) -DCMAKE_C_COMPILER=$(which $C_COMPILER);
   make;
   valgrind --error-exitcode=1 --leak-check=full ./test/bin/unittest;
 
 after_success:
-  coveralls --include src --gcov-options '\-lp' --gcov 'gcov-4.9';
+  coveralls --include src --gcov-options '\-lp' --gcov 'gcov-6';
   valgrind --error-exitcode=1 --leak-check=full ./test/bin/unittest;
 
