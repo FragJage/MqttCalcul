@@ -14,4 +14,4 @@ build:
   project: builds\msvc\MqttCalcul.sln
 
 after_build:
- - builds\msvc\bin\Debug\unittest.exe
+ - builds\msvc\Debug\unittest.exe
