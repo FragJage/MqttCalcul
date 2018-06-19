@@ -10,9 +10,7 @@ TestMqttCalcul::TestMqttCalcul() : TestClass("MqttCalcul", this)
 	addTest("Stop", &TestMqttCalcul::Stop);
 
 	mqttClient.SetMessageCallback(this);
-cout << "N3" << endl;
 	mqttClient.Connect();
-cout << "N4" << endl;
 	mqttClient.Subscribe("calcul/#");
 	mqttClient.SetMainTopic("calcul");
 
@@ -53,7 +51,7 @@ void TestMqttCalcul::ThreadStart(MqttCalcul* pMqttDev)
 
 void TestMqttCalcul::on_message(const string& topic, const string& message)
 {
-	//cout << "###" << topic << " : " << message << endl;
+	cout << "###" << topic << " : " << message << endl;
 	m_Messages[topic] = message;
 }
 
@@ -76,7 +74,7 @@ bool TestMqttCalcul::Start()
 	thread integrationTest(ThreadStart, &mqttCalcul);
 	integrationTest.detach();
 
-	waitMsg(1, 5000);
+	waitMsg(1, 10000);
 	map<string, string>::iterator it;
 	it = m_Messages.find("calcul/FixedSix");
 	assert(m_Messages.end() != it);

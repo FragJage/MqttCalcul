@@ -48,13 +48,11 @@ int MqttBase::GetKeepAlive()
 
 void MqttBase::Connect()
 {
-	cout << "A1" << endl;
+	cout << "A1 " << m_Server << endl;
 	//if (m_MqttClient!=nullptr) Disconnect();
-	cout << "A2 " << m_Server << endl;
 
 	//m_MqttClient = new mqtt::client(m_Server, "X");
 	m_MqttClient->set_callback(*this);
-	cout << "A3" << endl;
 	/*
 	mqtt::connect_options connOpts;
 	cout << "." << endl;
@@ -68,10 +66,10 @@ void MqttBase::Connect()
 	cout << "." << endl;
 	connOpts.set_keep_alive_interval(m_KeepAlive);
 	*/
-	cout << "A4" << endl;
+	cout << "A3" << endl;
 	//m_MqttClient->connect(connOpts);
 	m_MqttClient->connect();
-	cout << "A5" << endl;
+	cout << "A3" << endl;
 }
 
 void MqttBase::Disconnect()
