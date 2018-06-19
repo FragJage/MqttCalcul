@@ -19,28 +19,29 @@ addons:
       - mosquitto
 
 before_install:
-  - cd ..
+  - pushd ..
   - git clone https://github.com/eclipse/paho.mqtt.c.git
   - cd paho.mqtt.c
   - mkdir build && cd build
-  - cmake -DPAHO_WITH_SSL=TRUE -DPAHO_BUILD_DOCUMENTATION=FALSE -DPAHO_BUILD_SAMPLES=FALSE -DPAHO_ENABLE_TESTING=FALSE -DCMAKE_CXX_COMPILER=$(which $CXX_COMPILER) -DCMAKE_C_COMPILER=$(which $C_COMPILER) ..
+  - cmake -DPAHO_WITH_SSL=TRUE -DPAHO_BUILD_DOCUMENTATION=FALSE -DPAHO_BUILD_SAMPLES=FALSE -DPAHO_ENABLE_TESTING=FALSE -DCMAKE_C_COMPILER=$(which $C_COMPILER) ..
   - make && sudo make install
   - cd ../..
   - git clone https://github.com/eclipse/paho.mqtt.cpp.git
   - cd paho.mqtt.cpp
   - mkdir build && cd build
-  - cmake -DPAHO_WITH_SSL=TRUE -DPAHO_MQTT_C_PATH=../../paho.mqtt.c -DCMAKE_CXX_COMPILER=$(which $CXX_COMPILER) -DCMAKE_C_COMPILER=$(which $C_COMPILER) ..
+  - cmake -DPAHO_WITH_SSL=TRUE -DPAHO_MQTT_C_PATH=../../paho.mqtt.c -DCMAKE_CXX_COMPILER=$(which $CXX_COMPILER) ..
   - make && sudo make install
-  - cd ../../MqttCalcul
   - sudo ldconfig
+  - popd
 
 install:
   - sudo pip install -U "cpp-coveralls"
 
 script:
-  cmake . -G"Unix Makefiles" -DCMAKE_CXX_COMPILER=$(which $CXX_COMPILER) -DCMAKE_C_COMPILER=$(which $C_COMPILER);
+  cmake . -G"Unix Makefiles" -DCMAKE_CXX_COMPILER=$(which $CXX_COMPILER);
   make;
-  valgrind --error-exitcode=1 --leak-check=full ./test/bin/unittest;
+  ps -ax | grep mosquitto
+  ./test/bin/unittest;
 
 after_success:
   coveralls --include src --gcov-options '\-lp' --gcov 'gcov-6';
