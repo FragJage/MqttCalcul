@@ -38,12 +38,12 @@ install:
   - sudo pip install -U "cpp-coveralls"
 
 script:
-  cmake . -G"Unix Makefiles" -DCMAKE_CXX_COMPILER=$(which $CXX_COMPILER);
-  make;
-  ps -ax | grep mosquitto
-  ./test/bin/unittest;
+  - cmake . -G"Unix Makefiles" -DCMAKE_CXX_COMPILER=$(which $CXX_COMPILER)
+  - make
+  - ps -ax | grep mosquitto
+  - ./test/bin/unittest
 
 after_success:
-  coveralls --include src --gcov-options '\-lp' --gcov 'gcov-6';
-  valgrind --error-exitcode=1 --leak-check=full ./test/bin/unittest;
+  - coveralls --include src --gcov-options '\-lp' --gcov 'gcov-6'
+  - valgrind --error-exitcode=1 --leak-check=full ./test/bin/unittest
 
