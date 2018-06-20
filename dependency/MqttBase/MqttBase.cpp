@@ -4,9 +4,8 @@
 
 using namespace std;
 
-MqttBase::MqttBase() : m_Server("tcp://localhost:1883"), m_Id(""), m_MainTopic(""), m_KeepAlive(300), m_Timeout(5), m_MqttClient(nullptr), m_MqttCli(m_Server, "")
+MqttBase::MqttBase() : m_Server("tcp://localhost:1883"), m_Id(""), m_MainTopic(""), m_KeepAlive(300), m_Timeout(5), m_MqttClient(nullptr)
 {
-	m_MqttClient = &m_MqttCli;
 }
 
 MqttBase::~MqttBase()
@@ -48,28 +47,21 @@ int MqttBase::GetKeepAlive()
 
 void MqttBase::Connect()
 {
-	cout << "A1 " << m_Server << endl;
-	//if (m_MqttClient!=nullptr) Disconnect();
+	if (m_MqttClient!=nullptr) Disconnect();
 
-	//m_MqttClient = new mqtt::client(m_Server, "X");
+	m_MqttClient = new mqtt::client(m_Server, "");
 	m_MqttClient->set_callback(*this);
-	/*
+
 	mqtt::connect_options connOpts;
-	cout << "." << endl;
 	connOpts.set_automatic_reconnect(true);
-	cout << "." << endl;
 	connOpts.set_clean_session(true);
-	cout << "." << endl;
 	connOpts.set_connection_timeout(m_Timeout);
-	cout << "." << endl;
 	connOpts.set_connect_timeout(m_Timeout);
-	cout << "." << endl;
 	connOpts.set_keep_alive_interval(m_KeepAlive);
-	*/
-	cout << "A3" << endl;
-	//m_MqttClient->connect(connOpts);
-	m_MqttClient->connect();
-	cout << "A3" << endl;
+
+	cout << "AV : " << m_Server << endl;
+	m_MqttClient->connect(connOpts);
+	cout << "AP" << endl;
 }
 
 void MqttBase::Disconnect()
@@ -79,8 +71,8 @@ void MqttBase::Disconnect()
 	if(m_MqttClient->is_connected()) 
 		m_MqttClient->disconnect();
 
-	//delete m_MqttClient;
-	//m_MqttClient = nullptr;
+	delete m_MqttClient;
+	m_MqttClient = nullptr;
 }
 
 void MqttBase::Publish(const string& sensor, const string& value)
@@ -106,6 +98,7 @@ void MqttBase::Unubscribe(const std::string& topic)
 
 void MqttBase::message_arrived(mqtt::const_message_ptr msg)
 {
+	cout << "MSG ARRIVED..." << endl;
 	on_message(msg->get_topic(), msg->get_payload_str());
 	return;
 }
