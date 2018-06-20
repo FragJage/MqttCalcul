@@ -73,7 +73,7 @@ int ServiceConditionVariable::wait()
 int ServiceConditionVariable::wait_for(int timeout)
 {
 	unique_lock<mutex> lock(m_UniqueMutex);
-	if (m_UniqueConditionVariable.wait_for(lock, timeout * chrono::milliseconds(1)) == cv_status::timeout) m_LastId = Service::TIMEOUT;
+	if (m_UniqueConditionVariable.wait_for(lock, chrono::milliseconds(timeout)) == cv_status::timeout) m_LastId = Service::TIMEOUT;
 	return m_LastId;
 };
 
@@ -143,13 +143,13 @@ void Service::SetIds(vector<reference_wrapper<ServiceConditionVariable>> cvs)
 		cvs[i].get().set_id(i + 1);
 }
 
-int Service::Wait(vector<reference_wrapper<ServiceConditionVariable>> cvs)
+int Service::Wait(const vector<reference_wrapper<ServiceConditionVariable>>& cvs)
 {
 	SetIds(cvs);
 	return ServiceConditionVariable::wait();
 }
 
-int Service::WaitFor(std::vector<std::reference_wrapper<ServiceConditionVariable>> cvs, int timeout)
+int Service::WaitFor(const std::vector<std::reference_wrapper<ServiceConditionVariable>>& cvs, int timeout)
 {
 	SetIds(cvs);
 	return ServiceConditionVariable::wait_for(timeout);
