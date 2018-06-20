@@ -27,7 +27,9 @@ int main()
     }
 
     if(ret!=-1)
+	{
         if(!unitTest.run()) ret = 1;
+	}
 
 	#if defined(_MSC_VER)
 	cout << "Press any key..." << endl;
