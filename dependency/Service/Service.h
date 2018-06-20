@@ -42,8 +42,8 @@ public:
 	static const int TIMEOUT;
 
 	int Start(int argc, char* argv[]);
-	int Wait(std::vector<std::reference_wrapper<ServiceConditionVariable>> cvs);
-	int WaitFor(std::vector<std::reference_wrapper<ServiceConditionVariable>> cvs, int timeout);
+	int Wait(const std::vector<std::reference_wrapper<ServiceConditionVariable>>& cvs);
+	int WaitFor(const std::vector<std::reference_wrapper<ServiceConditionVariable>>& cvs, int timeout);
 	StatusKind GetStatus();
 	void ChangeStatus(StatusKind status);
 
