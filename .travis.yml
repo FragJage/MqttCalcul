@@ -41,7 +41,7 @@ script:
   - cmake . -G"Unix Makefiles" -DCMAKE_CXX_COMPILER=$(which $CXX_COMPILER)
   - make
   - ps -ax | grep mosquitto
-  - ./test/bin/unittest
+  - sudo ./test/bin/unittest
 
 after_success:
   - coveralls --include src --gcov-options '\-lp' --gcov 'gcov-6'
