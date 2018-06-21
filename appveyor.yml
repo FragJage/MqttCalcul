@@ -9,7 +9,7 @@ platform: x86
 install:
  - appveyor DownloadFile http://slproweb.com/download/Win32OpenSSL_Light-1_1_0h.exe
  - Win32OpenSSL_Light-1_1_0h.exe /VERYSILENT
- - puhsd C:\OpenSSL-Win32
+ - pushd C:\OpenSSL-Win32
  - appveyor DownloadFile ftp://sources.redhat.com/pub/pthreads-win32/dll-latest/dll/x86/pthreadVC2.dll
  - popd
  - SET PATH=%PATH%;C:\OpenSSL-Win32
