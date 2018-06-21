@@ -8,14 +8,6 @@ TestMqttCalcul::TestMqttCalcul() : TestClass("MqttCalcul", this)
 	addTest("Calculation", &TestMqttCalcul::Calculation);
 	addTest("Commands", &TestMqttCalcul::Commands);
 	addTest("Stop", &TestMqttCalcul::Stop);
-
-	mqttClient.SetMessageCallback(this);
-	mqttClient.Connect();
-	mqttClient.Subscribe("calcul/#");
-	mqttClient.SetMainTopic("calcul");
-
-	mqttSender.Connect();
-	mqttSender.SetMainTopic("owfs");
 }
 
 TestMqttCalcul::~TestMqttCalcul()
@@ -71,6 +63,14 @@ void TestMqttCalcul::waitMsg(size_t maxMsg, int maxTime)
 
 bool TestMqttCalcul::Start()
 {
+	mqttClient.SetMessageCallback(this);
+	mqttClient.Connect();
+	mqttClient.Subscribe("calcul/#");
+	mqttClient.SetMainTopic("calcul");
+
+	mqttSender.Connect();
+	mqttSender.SetMainTopic("owfs");
+
 	thread integrationTest(ThreadStart, &mqttCalcul);
 	integrationTest.detach();
 
