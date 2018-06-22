@@ -17,7 +17,7 @@ install:
  - mosquitto-1.3.5-install-win32.exe /S
  - netstat -an
  - wmic service get state,displayname
- - "C:\Progra~1\mosquitto\mosquitto.exe"
+ - C:\Progra~1\mosquitto\mosquitto.exe
 
 build:
   project: builds\msvc\MqttCalcul.sln
