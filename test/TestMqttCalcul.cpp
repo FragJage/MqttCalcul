@@ -63,6 +63,9 @@ void TestMqttCalcul::waitMsg(size_t maxMsg, int maxTime)
 
 bool TestMqttCalcul::Start()
 {
+	thread integrationTest(ThreadStart, &mqttCalcul);
+	integrationTest.detach();
+
 	mqttClient.SetMessageCallback(this);
 	mqttClient.Connect();
 	mqttClient.Subscribe("calcul/#");
@@ -70,9 +73,6 @@ bool TestMqttCalcul::Start()
 
 	mqttSender.Connect();
 	mqttSender.SetMainTopic("owfs");
-
-	thread integrationTest(ThreadStart, &mqttCalcul);
-	integrationTest.detach();
 
 	waitMsg(1, 10000);
 	map<string, string>::iterator it;
