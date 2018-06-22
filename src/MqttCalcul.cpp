@@ -22,7 +22,7 @@ MqttCalcul::~MqttCalcul()
 void MqttCalcul::DaemonConfigure(SimpleIni& iniFile)
 {
     LOG_ENTER;
-
+cout << "MqttCalcul Configure start";
 	for (SimpleIni::SectionIterator itSection = iniFile.beginSection(); itSection != iniFile.endSection(); ++itSection)
 	{
 		if ((*itSection) == "mqtt") continue;
@@ -31,7 +31,7 @@ void MqttCalcul::DaemonConfigure(SimpleIni& iniFile)
         string name    = (*itSection);
         string type    = iniFile.GetValue(name, "type", "");
         string formula = iniFile.GetValue(name, "formula", "");
-
+cout << ".";
         LOG_VERBOSE(m_Log) << "Create " << name <<"("<< type <<") = "<< formula;
         try
         {
@@ -44,12 +44,14 @@ void MqttCalcul::DaemonConfigure(SimpleIni& iniFile)
         }
     }
 
+	cout << endl << "MqttCalcul Configure before subcribe" << endl;
 	for (vector<CalculData>::iterator it = m_Calculs.begin(); it != m_Calculs.end(); ++it)
 	{
 		CalculData* pCalculData = &(*it);
 		vector<CalculData::Device> devices = pCalculData->GetDevices();
 		for (auto itdev = devices.cbegin(); itdev != devices.cend(); ++itdev)
 		{
+cout << ".";
 			LOG_VERBOSE(m_Log) << "Subcribe to server " << itdev->Server << ", topic " << itdev->Topic;
 			if(!m_CacheManager.AddSensor(itdev->Server, itdev->Topic, pCalculData))
 				LOG_WARNING(m_Log) << "Unable to find server " << itdev->Server << ", topic " << itdev->Topic;
@@ -57,6 +59,7 @@ void MqttCalcul::DaemonConfigure(SimpleIni& iniFile)
 	}
 
 
+cout << endl << "MqttCalcul Configure end" << endl;
 	LOG_EXIT_OK;
 }
 
@@ -186,10 +189,12 @@ void MqttCalcul::on_message(const string& topic, const string& message)
 int MqttCalcul::DaemonLoop(int argc, char* argv[])
 {
 	LOG_ENTER;
+cout << "MqttCalcul Loop start" << endl;
 
 	Subscribe(GetMainTopic() + "command/#");
 	LOG_VERBOSE(m_Log) << "Subscript to : " << GetMainTopic() + "command/#";
 
+cout << "MqttCalcul Loop before initial sending";
 	for (vector<CalculData>::iterator it = m_Calculs.begin(); it != m_Calculs.end(); ++it)
 	{
 		CalculData* pCalculData = &(*it);
@@ -200,16 +205,19 @@ int MqttCalcul::DaemonLoop(int argc, char* argv[])
 		string value = Calculator::Evaluate(pCalculData, values);
 		if (pCalculData->IsNewValue(value))
 		{
+cout << ".";
 			LOG_VERBOSE(m_Log) << "Mqtt send calcul " << pCalculData->GetName() << " = " << pCalculData->GetValue();
 			Publish(pCalculData->GetName(), pCalculData->GetValue());
 		}
 	}
-
+cout << endl;
 	bool bStop = false;
 	bool bPause = false;
 	while(!bStop)
     {
+cout << "MqttCalcul Loop before wait" << endl;
 		int cond = Service::Get()->Wait({ m_MqttQueueCond });
+cout << "MqttCalcul Loop after wait : " << cond << endl;
 		if (cond == Service::STATUS_CHANGED)
 		{
 			switch (Service::Get()->GetStatus())
@@ -229,12 +237,15 @@ int MqttCalcul::DaemonLoop(int argc, char* argv[])
 		if((!bPause)&&(cond == 1))
 		{
 			lock_guard<mutex> lock(m_MqttQueueAccess);
+cout << "MqttCalcul Loop publish " << m_MqttQueue.size() << " ";
 			while (!m_MqttQueue.empty())
 			{
+cout << ".";
 				MqttQueue& mqttQueue = m_MqttQueue.front();
 				Publish(mqttQueue.Topic, mqttQueue.Message);
 				m_MqttQueue.pop();
 			}
+cout << "MqttCalcul Loop publish End" << endl;
 		}
     }
 

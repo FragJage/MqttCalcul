@@ -1,5 +1,3 @@
-#include <iostream>
-
 #include "MqttBase.h"
 
 using namespace std;
@@ -59,9 +57,7 @@ void MqttBase::Connect()
 	connOpts.set_connect_timeout(m_Timeout);
 	connOpts.set_keep_alive_interval(m_KeepAlive);
 
-	cout << "AV : " << m_Server << endl;
 	m_MqttClient->connect(connOpts);
-	cout << "AP" << endl;
 }
 
 void MqttBase::Disconnect()
