@@ -9,18 +9,15 @@ platform: x86
 install:
  - appveyor DownloadFile http://slproweb.com/download/Win32OpenSSL_Light-1_1_0h.exe
  - Win32OpenSSL_Light-1_1_0h.exe /VERYSILENT
- - cd
- - echo %APPVEYOR_BUILD_FOLDER%
  - cd C:\OpenSSL-Win32
  - appveyor DownloadFile http://ftp.gwdg.de/pub/linux/sources.redhat.com/pthreads-win32/dll-latest/dll/x86/pthreadVC2.dll
  - cd %APPVEYOR_BUILD_FOLDER%
- - cd
  - SET PATH=%PATH%;C:\OpenSSL-Win32
  - appveyor DownloadFile https://mosquitto.org/files/binary/win32/mosquitto-1.3.5-install-win32.exe
  - mosquitto-1.3.5-install-win32.exe /S
  - netstat -an
  - wmic service get state,displayname
- - C:\Progra~1\mosquitto\mosquitto.exe
+ - C:\Progra~2\mosquitto\mosquitto.exe
 
 build:
   project: builds\msvc\MqttCalcul.sln
