@@ -53,7 +53,6 @@ void MqttBase::Connect()
 	mqtt::connect_options connOpts;
 	connOpts.set_automatic_reconnect(true);
 	connOpts.set_clean_session(true);
-	connOpts.set_connection_timeout(m_Timeout);
 	connOpts.set_connect_timeout(m_Timeout);
 	connOpts.set_keep_alive_interval(m_KeepAlive);
 
@@ -64,7 +63,7 @@ void MqttBase::Disconnect()
 {
 	if (m_MqttClient==nullptr) return;
 
-	if(m_MqttClient->is_connected()) 
+	if(m_MqttClient->is_connected())
 		m_MqttClient->disconnect();
 
 	delete m_MqttClient;
